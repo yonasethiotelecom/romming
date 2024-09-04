@@ -1,0 +1,146 @@
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "name" TEXT,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FileName" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "FileName_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SumOfAverages2G" (
+    "id" SERIAL NOT NULL,
+    "Averages2G" DECIMAL(65,30) NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SumOfAverages2G_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SumOfAverages3G" (
+    "id" SERIAL NOT NULL,
+    "Averages3G" DECIMAL(65,30) NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "SumOfAverages3G_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "InboundRoamer2G" (
+    "id" SERIAL NOT NULL,
+    "AA_MSCS" JSONB NOT NULL,
+    "NR_MSCS" JSONB NOT NULL,
+    "ER_MSCS" JSONB NOT NULL,
+    "SSWR_MSCS" JSONB NOT NULL,
+    "AllAverage" JSONB NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "InboundRoamer2G_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "InboundRoamer3G" (
+    "id" SERIAL NOT NULL,
+    "AA_MSCS" JSONB NOT NULL,
+    "NR_MSCS" JSONB NOT NULL,
+    "ER_MSCS" JSONB NOT NULL,
+    "SSWR_MSCS" JSONB NOT NULL,
+    "AllAverage" JSONB NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "InboundRoamer3G_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Lusr2G" (
+    "id" SERIAL NOT NULL,
+    "LUSR" JSONB NOT NULL,
+    "LUSRAverage" JSONB NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Lusr2G_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Lusr3G" (
+    "id" SERIAL NOT NULL,
+    "LUSR" JSONB NOT NULL,
+    "LUSRAverage" JSONB NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Lusr3G_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Moc_Asr" (
+    "id" SERIAL NOT NULL,
+    "ASR" JSONB NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Moc_Asr_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Mtc_Asr" (
+    "id" SERIAL NOT NULL,
+    "ASR" JSONB NOT NULL,
+    "fileId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Mtc_Asr_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "FileName_name_key" ON "FileName"("name");
+
+-- AddForeignKey
+ALTER TABLE "SumOfAverages2G" ADD CONSTRAINT "SumOfAverages2G_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SumOfAverages3G" ADD CONSTRAINT "SumOfAverages3G_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "InboundRoamer2G" ADD CONSTRAINT "InboundRoamer2G_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "InboundRoamer3G" ADD CONSTRAINT "InboundRoamer3G_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Lusr2G" ADD CONSTRAINT "Lusr2G_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Lusr3G" ADD CONSTRAINT "Lusr3G_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Moc_Asr" ADD CONSTRAINT "Moc_Asr_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Mtc_Asr" ADD CONSTRAINT "Mtc_Asr_fileId_fkey" FOREIGN KEY ("fileId") REFERENCES "FileName"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

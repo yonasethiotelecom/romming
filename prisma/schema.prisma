@@ -1,0 +1,197 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model User {
+  id    Int     @id @default(autoincrement())
+  title String 
+  name  String
+  empId String @unique
+  email     String    @unique
+  password  String
+   role      Role?     @relation(fields: [roleId], references: [id]) // Define the relationship with Role
+   roleId    Int   @default(1) // Define the roleId field
+ createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now()) 
+}
+
+// role.model.prisma
+model Role {
+  /// @z.number().int().optional()
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String? 
+  //isAdmin     Boolean   @default(false)
+ jobRole  JobRole   @default(User)
+   /// @z.number().int().optional()
+  orgId   Int?
+  
+   /// @z.date().optional()
+  createdAt   DateTime  @default(now())
+   /// @z.date().optional()
+  updatedAt   DateTime  @updatedAt @default(now())
+
+  // Define the relationship with User
+  abilities   Ability[]
+  users       User[]
+}
+
+
+model Ability {
+  /// @z.number().int().optional()
+  id      Int     @id @default(autoincrement())
+  subject String @unique
+  action  String[]
+  /// @z.number().int().optional()
+  roleId  Int?
+  role    Role?     @relation(fields: [roleId], references: [id])
+
+}
+
+
+
+
+
+enum JobRole {
+  User
+  Administrator
+  Gust
+}
+
+
+
+model FileName{
+     id    Int     @id @default(autoincrement())
+     name String   @unique
+     sumOfAverages2Gs   SumOfAverages2G[]
+     sumOfAverages3Gs   SumOfAverages3G[]
+     inboundRoamer2Gs    InboundRoamer2G[]
+     inboundRoamer3Gs     InboundRoamer3G[]
+     moc_ASRs Moc_Asr[]
+       mtc_ASRs Mtc_Asr[]
+     iusr2Gs Lusr2G[]
+    iusr3Gs Lusr3G[]
+     createdAt   DateTime  @default(now())
+     updatedAt   DateTime  @updatedAt @default(now()) 
+
+
+}
+
+model SumOfAverages2G{
+   id    Int     @id @default(autoincrement())
+   Averages2G Decimal
+     shift  Jobshift @default(day)
+  file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+  fileId Int
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now()) 
+
+}
+
+model SumOfAverages3G{
+   id    Int     @id @default(autoincrement())
+   Averages3G Decimal
+     shift  Jobshift @default(day)
+    file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+  fileId Int
+
+   createdAt   DateTime  @default(now())
+   updatedAt   DateTime  @updatedAt @default(now()) 
+}
+
+model InboundRoamer2G  {
+  id   Int    @id @default(autoincrement())
+  AA_MSCS Json
+  NR_MSCS Json
+  ER_MSCS Json
+  SSWR_MSCS Json
+  AllAverage  Json
+  shift  Jobshift @default(day)
+  file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+  fileId Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now()) 
+}
+
+
+model InboundRoamer3G  {
+  id   Int    @id @default(autoincrement())
+  AA_MSCS Json
+  NR_MSCS Json
+  ER_MSCS Json
+  SSWR_MSCS Json
+  AllAverage   Json 
+  shift  Jobshift @default(day)
+  file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+  fileId Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now()) 
+}
+
+
+model Lusr2G{
+    id   Int    @id @default(autoincrement())
+    LUSR Json
+    LUSRAverage Json
+      shift  Jobshift @default(day)
+    file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+    fileId Int
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt @default(now())
+}
+
+
+model Lusr3G{
+    id   Int    @id @default(autoincrement())
+    LUSR Json
+    LUSRAverage Json
+      shift  Jobshift @default(day)
+    file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+    fileId Int
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt @default(now())
+}
+
+model Moc_Asr{
+   id   Int    @id @default(autoincrement())
+   ASR Json
+   file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+   fileId Int
+   shift  Jobshift @default(day)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+
+}
+
+model Mtc_Asr{
+   id   Int    @id @default(autoincrement())
+   ASR Json
+   file   FileName @relation(fields: [fileId], references: [id] , onDelete: Cascade, onUpdate: Cascade)
+   fileId Int
+   shift  Jobshift @default(day)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt @default(now())
+
+}
+
+enum Jobshift {
+
+day
+mid
+night
+}
